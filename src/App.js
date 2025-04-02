@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import NumberInput from "./components/NumberInput";
+import BSTVisualizer from "./components/BSTVisualizer";
+import PreviousTrees from "./components/PreviousTrees";
 
-function App() {
+const App = () => {
+  const [currentTree, setCurrentTree] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Binary Search Tree Visualizer</h1>
+      <NumberInput onBSTCreated={setCurrentTree} />
+      {currentTree && <BSTVisualizer treeJson={currentTree.treeJson} />}
+      <PreviousTrees />
     </div>
   );
-}
+};
 
 export default App;
