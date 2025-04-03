@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getPreviousTrees } from "../services/api";
+import { previousTrees } from "../services/api";
 
 const PreviousTrees = () => {
   const [trees, setTrees] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await getPreviousTrees();
+      const response = await previousTrees();
       setTrees(response.data);
     }
     fetchData();

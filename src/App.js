@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NumberInput from "./components/NumberInput";
 import BSTVisualizer from "./components/BSTVisualizer";
-import PreviousTrees from "./components/PreviousTrees";
+import PreviousTrees from "./components/previous-trees";
 
 const App = () => {
   const [currentTree, setCurrentTree] = useState(null);

@@ -6,6 +6,6 @@ export const processNumbers = (numbers) => {
   return axios.post(`${API_URL}/process-numbers`, { numbers });
 };
 
-export const getPreviousTrees = () => {
+export const previousTrees = () => {
   return axios.get(`${API_URL}/previous-trees`);
 };
