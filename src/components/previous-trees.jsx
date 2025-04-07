@@ -6,17 +6,15 @@ const PreviousTrees = () => {
   const [selectedTree, setSelectedTree] = useState(null);
 
   useEffect(() => {
-    // Fetch previous trees from the backend
     axios
       .get("http://localhost:8080/api/bst/previous-trees")
       .then((response) => {
         console.log("Fetched previous trees:", response.data);
-        // Assuming the backend returns an array of trees with treeJson as a string, so we parse it here
         const parsedTrees = response.data.map((tree) => ({
           ...tree,
-          treeJson: JSON.parse(tree.treeJson), // Parse the treeJson string into an object
+          treeJson: JSON.parse(tree.treeJson),
         }));
-        setTrees(parsedTrees); // Store the fetched trees in state
+        setTrees(parsedTrees);
       })
       .catch((error) => {
         console.error("Error fetching tree data:", error);
@@ -24,9 +22,9 @@ const PreviousTrees = () => {
   }, []);
 
   const handleTreeSelect = (treeId) => {
-    const tree = trees.find((tree) => tree.id === treeId); // Find the tree by ID
-    console.log("Selected Tree:", tree); // Log selected tree to debug
-    setSelectedTree(tree); // Set the selected tree for visualization
+    const tree = trees.find((tree) => tree.id === treeId);
+    console.log("Selected Tree:", tree);
+    setSelectedTree(tree);
   };
 
   return (
@@ -35,7 +33,7 @@ const PreviousTrees = () => {
       <ul>
         {trees.map((tree) => (
           <li key={tree.id} onClick={() => handleTreeSelect(tree.id)}>
-            Tree {tree.id}
+            <button> Tree {tree.id} </button>
           </li>
         ))}
       </ul>
@@ -44,7 +42,6 @@ const PreviousTrees = () => {
         <div>
           <h3>Selected Tree:</h3>
           <pre>{JSON.stringify(selectedTree.treeJson, null, 2)}</pre>{" "}
-          {/* Display the treeJson object */}
         </div>
       )}
     </div>
