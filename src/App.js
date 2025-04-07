@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import NumberInput from "./components/NumberInput";
 import BSTVisualizer from "./components/BSTVisualizer";
 import PreviousTrees from "./components/previous-trees";
+import EnterNumbers from "./components/enter-numbers";
 
 const App = () => {
   const [treeData, setTreeData] = useState(null);
@@ -14,7 +14,7 @@ const App = () => {
   return (
     <div>
       <h1>Binary Search Tree Visualizer</h1>
-      <NumberInput onBSTCreated={handleBSTCreated} />
+      <EnterNumbers onBSTCreated={handleBSTCreated} />
       {treeData && <BSTVisualizer treeData={treeData} />}
       <button onClick={() => setShowPreviousTrees(!showPreviousTrees)}>
         {showPreviousTrees ? "Hide Previous Trees" : "Show Previous Trees"}

@@ -3,18 +3,15 @@ import { processNumbers } from "../services/api";
 
 const parseTreeJson = (jsonString) => {
   try {
-    // If already an object, don't parse
     if (typeof jsonString === "object") return jsonString;
 
     const parsed = JSON.parse(jsonString);
 
-    // Check if it's an empty object
     if (!parsed || Object.keys(parsed).length === 0) {
       console.error("Received empty JSON object", parsed);
       return null;
     }
 
-    // Check if root exists
     if (!parsed.root) {
       console.error("Missing root node in tree data", parsed);
       return null;
@@ -27,7 +24,7 @@ const parseTreeJson = (jsonString) => {
   }
 };
 
-const NumberInput = ({ onBSTCreated }) => {
+const EnterNumbers = ({ onBSTCreated }) => {
   const [input, setInput] = useState("4, 2, 7, 13");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -40,7 +37,6 @@ const NumberInput = ({ onBSTCreated }) => {
     try {
       const numbers = input.split(",").map((num) => parseInt(num.trim(), 10));
 
-      // Filter out NaN values
       const validNumbers = numbers.filter((num) => !isNaN(num));
 
       if (validNumbers.length === 0) {
@@ -52,12 +48,10 @@ const NumberInput = ({ onBSTCreated }) => {
       const response = await processNumbers(validNumbers);
       console.log("Response data:", response.data);
 
-      // Check if treeJson exists
       if (!response.data || !response.data.treeJson) {
         throw new Error("Server returned invalid response");
       }
 
-      // Parse the tree JSON
       const parsedTree = parseTreeJson(response.data.treeJson);
       if (!parsedTree) {
         setError(
@@ -67,7 +61,7 @@ const NumberInput = ({ onBSTCreated }) => {
       } else {
         onBSTCreated({
           ...response.data,
-          treeJson: JSON.stringify(parsedTree), // Ensure we're passing a string
+          treeJson: JSON.stringify(parsedTree),
         });
       }
     } catch (err) {
@@ -106,4 +100,4 @@ const NumberInput = ({ onBSTCreated }) => {
   );
 };
 
-export default NumberInput;
+export default EnterNumbers;

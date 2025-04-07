@@ -12,7 +12,6 @@ const BSTVisualizer = ({ treeData }) => {
 
     let treeJson;
     try {
-      // Make sure treeJson is a parsed object
       treeJson =
         typeof treeData.treeJson === "string"
           ? JSON.parse(treeData.treeJson)
@@ -20,7 +19,6 @@ const BSTVisualizer = ({ treeData }) => {
 
       console.log("Visualizing tree:", treeJson);
 
-      // Check if we have a valid root node
       if (!treeJson.root) {
         console.error("Tree data doesn't have a root node:", treeJson);
         return;
@@ -41,12 +39,10 @@ const BSTVisualizer = ({ treeData }) => {
       .append("g")
       .attr("transform", "translate(50,50)");
 
-    // Convert JSON into a hierarchical structure
     const root = d3.hierarchy(treeJson.root);
     const treeLayout = d3.tree().size([width - 100, height - 100]);
     treeLayout(root);
 
-    // Draw links (lines)
     svg
       .selectAll("line")
       .data(root.links())
@@ -58,7 +54,6 @@ const BSTVisualizer = ({ treeData }) => {
       .attr("y2", (d) => d.target.y)
       .attr("stroke", "black");
 
-    // Draw nodes (circles)
     svg
       .selectAll("circle")
       .data(root.descendants())
@@ -69,14 +64,13 @@ const BSTVisualizer = ({ treeData }) => {
       .attr("r", 15)
       .attr("fill", "steelblue");
 
-    // Add text labels
     svg
       .selectAll("text")
       .data(root.descendants())
       .enter()
       .append("text")
       .attr("x", (d) => d.x)
-      .attr("y", (d) => d.y + 5) // Adjusted to center text in circles
+      .attr("y", (d) => d.y + 5)
       .attr("text-anchor", "middle")
       .text((d) => d.data.value)
       .attr("fill", "white");
