@@ -25,7 +25,7 @@ const parseTreeJson = (jsonString) => {
 };
 
 const EnterNumbers = ({ onBSTCreated }) => {
-  const [input, setInput] = useState("4, 2, 7, 13");
+  const [input, setInput] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
