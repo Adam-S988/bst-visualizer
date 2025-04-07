@@ -1,91 +1,54 @@
-import React, { useEffect, useRef } from "react";
-import * as d3 from "d3";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const BSTVisualizer = ({ treeData }) => {
-  const svgRef = useRef();
+const PreviousTrees = () => {
+  const [trees, setTrees] = useState([]);
+  const [selectedTree, setSelectedTree] = useState(null);
 
   useEffect(() => {
-    if (!treeData || !treeData.treeJson) {
-      console.error("No valid tree data provided:", treeData);
-      return;
-    }
+    // Fetch previous trees from the backend
+    axios
+      .get("http://localhost:8080/api/bst/previous-trees")
+      .then((response) => {
+        console.log("Fetched previous trees:", response.data);
+        // Assuming the backend returns an array of trees with treeJson as a string, so we parse it here
+        const parsedTrees = response.data.map((tree) => ({
+          ...tree,
+          treeJson: JSON.parse(tree.treeJson), // Parse the treeJson string into an object
+        }));
+        setTrees(parsedTrees); // Store the fetched trees in state
+      })
+      .catch((error) => {
+        console.error("Error fetching tree data:", error);
+      });
+  }, []);
 
-    let treeJson;
-    try {
-      treeJson =
-        typeof treeData.treeJson === "string"
-          ? JSON.parse(treeData.treeJson)
-          : treeData.treeJson;
-
-      console.log("Visualizing tree:", treeJson);
-
-      if (!treeJson.root) {
-        console.error("Tree data doesn't have a root node:", treeJson);
-        return;
-      }
-    } catch (err) {
-      console.error("Error parsing tree JSON in visualizer:", err);
-      return;
-    }
-
-    const width = 500;
-    const height = 400;
-    d3.select(svgRef.current).selectAll("*").remove();
-
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", "translate(50,50)");
-
-    const root = d3.hierarchy(treeJson.root);
-    const treeLayout = d3.tree().size([width - 100, height - 100]);
-    treeLayout(root);
-
-    svg
-      .selectAll("line")
-      .data(root.links())
-      .enter()
-      .append("line")
-      .attr("x1", (d) => d.source.x)
-      .attr("y1", (d) => d.source.y)
-      .attr("x2", (d) => d.target.x)
-      .attr("y2", (d) => d.target.y)
-      .attr("stroke", "black");
-
-    svg
-      .selectAll("circle")
-      .data(root.descendants())
-      .enter()
-      .append("circle")
-      .attr("cx", (d) => d.x)
-      .attr("cy", (d) => d.y)
-      .attr("r", 15)
-      .attr("fill", "steelblue");
-
-    svg
-      .selectAll("text")
-      .data(root.descendants())
-      .enter()
-      .append("text")
-      .attr("x", (d) => d.x)
-      .attr("y", (d) => d.y + 5)
-      .attr("text-anchor", "middle")
-      .text((d) => d.data.value)
-      .attr("fill", "white");
-  }, [treeData]);
+  const handleTreeSelect = (treeId) => {
+    const tree = trees.find((tree) => tree.id === treeId); // Find the tree by ID
+    console.log("Selected Tree:", tree); // Log selected tree to debug
+    setSelectedTree(tree); // Set the selected tree for visualization
+  };
 
   return (
     <div>
-      <h2>Binary Search Tree Visualization</h2>
-      {!treeData ? (
-        <p>No valid tree data to display</p>
-      ) : (
-        <svg ref={svgRef} width="500" height="400"></svg>
+      <h2>Previous Trees</h2>
+      <ul>
+        {trees.map((tree) => (
+          <li key={tree.id} onClick={() => handleTreeSelect(tree.id)}>
+            Tree {tree.id}
+          </li>
+        ))}
+      </ul>
+
+      {selectedTree && (
+        <div>
+          <h3>Selected Tree:</h3>
+          <pre>{JSON.stringify(selectedTree.treeJson, null, 2)}</pre>{" "}
+          {/* Display the treeJson object */}
+        </div>
       )}
     </div>
   );
 };
 
-export default BSTVisualizer;
+export default PreviousTrees;
