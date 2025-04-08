@@ -12,7 +12,10 @@ const PreviousTrees = () => {
         console.log("Fetched previous trees:", response.data);
         const parsedTrees = response.data.map((tree) => ({
           ...tree,
-          treeJson: JSON.parse(tree.treeJson),
+          treeJson:
+            typeof tree.treeJson === "string"
+              ? JSON.parse(tree.treeJson)
+              : tree.treeJson,
         }));
         setTrees(parsedTrees);
       })
@@ -21,8 +24,7 @@ const PreviousTrees = () => {
       });
   }, []);
 
-  const handleTreeSelect = (treeId) => {
-    const tree = trees.find((tree) => tree.id === treeId);
+  const handleTreeSelect = (tree) => {
     console.log("Selected Tree:", tree);
     setSelectedTree(tree);
   };
@@ -30,10 +32,13 @@ const PreviousTrees = () => {
   return (
     <div>
       <h2>Previous Trees</h2>
+
       <ul>
         {trees.map((tree) => (
-          <li key={tree.id} onClick={() => handleTreeSelect(tree.id)}>
-            <button> Tree {tree.id} </button>
+          <li key={tree.id}>
+            <button onClick={() => handleTreeSelect(tree)}>
+              Tree {tree.id}
+            </button>
           </li>
         ))}
       </ul>
@@ -41,7 +46,7 @@ const PreviousTrees = () => {
       {selectedTree && (
         <div>
           <h3>Selected Tree:</h3>
-          <pre>{JSON.stringify(selectedTree.treeJson, null, 2)}</pre>{" "}
+          <pre>{JSON.stringify(selectedTree.treeJson, null, 2)}</pre>
         </div>
       )}
     </div>
