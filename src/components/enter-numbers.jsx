@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { processNumbers } from "../services/api";
+import ProcessNumbers from "./process-numbers";
 
 const parseTreeJson = (jsonString) => {
   try {
@@ -25,52 +25,35 @@ const parseTreeJson = (jsonString) => {
 };
 
 const EnterNumbers = ({ onBSTCreated }) => {
-  const [input, setInput] = useState();
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+    // Clear any previous errors when input changes
+    if (error) setError(null);
+  };
 
-    try {
-      const numbers = input.split(",").map((num) => parseInt(num.trim(), 10));
+  const handleProcessed = (data) => {
+    setLoading(false);
 
-      const validNumbers = numbers.filter((num) => !isNaN(num));
-
-      if (validNumbers.length === 0) {
-        throw new Error("Please enter valid numbers");
-      }
-
-      console.log("Submitting numbers:", validNumbers);
-
-      const response = await processNumbers(validNumbers);
-      console.log("Response data:", response.data);
-
-      if (!response.data || !response.data.treeJson) {
-        throw new Error("Server returned invalid response");
-      }
-
-      const parsedTree = parseTreeJson(response.data.treeJson);
-      if (!parsedTree) {
-        setError(
-          "Server returned invalid tree data format. Check server logs for details."
-        );
-        onBSTCreated(null);
-      } else {
-        onBSTCreated({
-          ...response.data,
-          treeJson: JSON.stringify(parsedTree),
-        });
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      setError(err.message || "Failed to process numbers");
+    const parsedTree = parseTreeJson(data.treeJson);
+    if (!parsedTree) {
+      setError("Server returned invalid tree data format");
       onBSTCreated(null);
-    } finally {
-      setLoading(false);
+    } else {
+      onBSTCreated({
+        ...data,
+        treeJson: JSON.stringify(parsedTree),
+      });
     }
+  };
+
+  const handleProcessError = (errorMsg) => {
+    setLoading(false);
+    setError(errorMsg);
+    onBSTCreated(null);
   };
 
   return (
@@ -80,12 +63,14 @@ const EnterNumbers = ({ onBSTCreated }) => {
         <input
           type="text"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleInputChange}
           placeholder="e.g. 10, 5, 20, 3, 7, 15, 25"
         />
-        <button onClick={handleSubmit} disabled={loading}>
-          {loading ? "Processing..." : "Submit"}
-        </button>
+        <ProcessNumbers
+          inputValue={input}
+          onProcessed={handleProcessed}
+          onError={handleProcessError}
+        />
       </div>
       {error && (
         <div style={{ color: "red", marginTop: "10px" }}>Error: {error}</div>
