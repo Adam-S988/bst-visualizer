@@ -30,23 +30,28 @@ const PreviousTrees = () => {
   };
 
   return (
-    <div>
-      <h2>Previous Trees</h2>
+    <div className="previous-trees-container app-container">
+      <h2 className="title">Previous Trees</h2>
 
-      <ul>
+      <ul className="tree-list">
         {trees.map((tree) => (
-          <li key={tree.id}>
-            <button onClick={() => handleTreeSelect(tree)}>
-              Tree {tree.id}
+          <li key={tree.id} className="tree-item">
+            <button
+              className="toggle-button"
+              onClick={() => handleTreeSelect(tree)}
+            >
+              View Tree #{tree.id}
             </button>
           </li>
         ))}
       </ul>
 
       {selectedTree && (
-        <div>
-          <h3>Selected Tree:</h3>
-          <pre>{JSON.stringify(selectedTree.treeJson, null, 2)}</pre>
+        <div className="selected-tree-section">
+          <h3 className="section-title">Selected Tree:</h3>
+          <pre className="selected-tree-json">
+            {JSON.stringify(selectedTree.treeJson, null, 2)}
+          </pre>
         </div>
       )}
     </div>

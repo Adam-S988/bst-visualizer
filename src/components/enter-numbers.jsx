@@ -57,10 +57,11 @@ const EnterNumbers = ({ onBSTCreated }) => {
   };
 
   return (
-    <div>
-      <h2>Enter Numbers</h2>
-      <div className="input-container">
+    <div className="enter-numbers-container">
+      <h2 className="section-title">🔢 Enter Numbers</h2>
+      <div className="input-wrapper">
         <input
+          className="number-input"
           type="text"
           value={input}
           onChange={handleInputChange}
@@ -72,15 +73,13 @@ const EnterNumbers = ({ onBSTCreated }) => {
           onError={handleProcessError}
         />
       </div>
-      {error && (
-        <div style={{ color: "red", marginTop: "10px" }}>Error: {error}</div>
-      )}
-      <div style={{ marginTop: "10px", color: "gray" }}>
+      {error && <div className="error-message">⚠️ {error}</div>}
+      <p className="input-hint">
         <small>
-          Enter numbers separated by commas. These will be converted to a
+          Enter numbers separated by commas. These will be converted into a
           balanced Binary Search Tree.
         </small>
-      </div>
+      </p>
     </div>
   );
 };
