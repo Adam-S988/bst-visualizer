@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BSTVisualizer from "./components/BSTVisualizer";
 import PreviousTrees from "./components/previous-trees";
 import EnterNumbers from "./components/enter-numbers";
-import "./App.css"; // Make sure this is imported
+import "./App.css";
 
 const App = () => {
   const [treeData, setTreeData] = useState(null);
@@ -17,7 +17,6 @@ const App = () => {
       <div className="app-header">🌳 Binary Search Tree Visualizer</div>
 
       <div className="app-content">
-        {/* Left Column */}
         <div className="left-column">
           <div className="enter-numbers-container">
             <div className="section-title">🔢 Enter Numbers</div>
@@ -41,7 +40,6 @@ const App = () => {
           </button>
         </div>
 
-        {/* Right Column */}
         <div className="right-column">
           {showPreviousTrees && (
             <div className="previous-trees-container">

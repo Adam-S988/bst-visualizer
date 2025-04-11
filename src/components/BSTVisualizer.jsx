@@ -15,7 +15,7 @@ const BSTVisualizer = ({ treeData }) => {
           ? JSON.parse(treeData.treeJson)
           : treeData.treeJson;
 
-      setFormattedTree(JSON.stringify(parsedJson)); // compact version
+      setFormattedTree(JSON.stringify(parsedJson));
     } catch (err) {
       console.error("Failed to parse treeJson:", err);
       setFormattedTree("Error parsing tree data.");
