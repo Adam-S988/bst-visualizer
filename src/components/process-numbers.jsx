@@ -9,7 +9,10 @@ const ProcessNumbers = ({ inputValue, onProcessed, onError }) => {
     try {
       const parsedNumbers = inputValue
         .split(",")
-        .map((num) => parseInt(num.trim(), 10));
+        .map((num) => num.trim())
+        .filter((num) => num !== "")
+        .map((num) => parseInt(num, 10))
+        .filter((num) => !isNaN(num));
       const numbers = parsedNumbers.filter((num) => !isNaN(num));
 
       if (numbers.length === 0) {
