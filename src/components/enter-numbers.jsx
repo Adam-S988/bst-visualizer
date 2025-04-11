@@ -31,7 +31,6 @@ const EnterNumbers = ({ onBSTCreated }) => {
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
-    // Clear any previous errors when input changes
     if (error) setError(null);
   };
 
@@ -58,7 +57,7 @@ const EnterNumbers = ({ onBSTCreated }) => {
 
   return (
     <div className="enter-numbers-container">
-      <h2 className="section-title">🔢 Enter Numbers</h2>
+      <h2 className="section-title"></h2>
       <div className="input-wrapper">
         <input
           className="number-input"
